@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Browser</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="renderer.js" defer></script>
+</head>
+<body>
+    <div class="title-bar">
+        <div class="title-bar-drag"></div>
+        <div class="title-bar-controls">
+            <button class="title-bar-button" id="minimize-btn">−</button>
+            <button class="title-bar-button" id="maximize-btn">□</button>
+            <button class="title-bar-button" id="close-btn">×</button>
+        </div>
+    </div>
+    
+    <div class="browser-container">
+        <div class="toolbar">
+            <button id="back-btn" class="toolbar-button" title="Back">←</button>
+            <button id="forward-btn" class="toolbar-button" title="Forward">→</button>
+            <button id="refresh-btn" class="toolbar-button" title="Refresh">↻</button>
+            <button id="home-btn" class="toolbar-button" title="Home">⌂</button>
+            
+            <div class="search-container">
+                <input type="text" id="url-bar" placeholder="Search or enter website URL">
+                <button id="go-btn" class="go-button">Go</button>
+            </div>
+            
+            <button id="bookmark-btn" class="toolbar-button" title="Bookmark">★</button>
+            <button id="settings-btn" class="toolbar-button" title="Settings">⚙</button>
+        </div>
+        
+        <div class="webview-container">
+            <webview id="webview" src="https://www.google.com" allowpopups></webview>
+        </div>
+        
+        <div class="status-bar">
+            <span id="status-text">Ready</span>
+            <span id="zoom-level">100%</span>
+        </div>
+    </div>
+</body>
+</html>
