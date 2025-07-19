@@ -1,0 +1,31 @@
+{
+  "name": "nexus-browser",
+  "version": "1.0.0",
+  "description": "A modern web browser",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^latest"
+  },
+  "build": {
+    "appId": "com.example.nexusbrowser",
+    "productName": "Nexus Browser",
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Network"
+    }
+  }
+}
