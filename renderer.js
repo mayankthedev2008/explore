@@ -26,12 +26,36 @@ const zoomLevel = document.getElementById('zoom-level')
 
 let currentZoom = 1
 
-// Navigation functions
-function navigateTo(url) {
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+// Improved URL handling functions
+function isURL(str) {
+    // Improved URL detection
+    const pattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+    return pattern.test(str) || 
+           str.includes('.') && 
+           !str.includes(' ') && 
+           !str.startsWith('?') && 
+           !str.startsWith('=')
+}
+
+function navigateTo(input) {
+    let url = input.trim()
+    
+    // If it's clearly not a URL, treat as search
+    if (!isURL(url)) {
+        url = `https://www.google.com/search?q=${encodeURIComponent(url)}`
+    } 
+    // Add https:// if missing
+    else if (!url.startsWith('http://') && !url.startsWith('https://')) {
         url = 'https://' + url
     }
-    webview.src = url
+    
+    try {
+        webview.src = url
+        urlBar.value = url // Update the URL bar with the actual URL being used
+    } catch (err) {
+        console.error('Navigation error:', err)
+        statusText.textContent = 'Error loading page'
+    }
 }
 
 function updateNavigationButtons() {
@@ -64,6 +88,7 @@ refreshBtn.addEventListener('click', () => {
 
 homeBtn.addEventListener('click', () => {
     webview.src = 'https://www.google.com'
+    urlBar.value = 'https://www.google.com'
 })
 
 // Webview events
@@ -103,7 +128,7 @@ webview.addEventListener('dom-ready', () => {
 // Zoom functionality
 document.addEventListener('keydown', (e) => {
     if (e.ctrlKey) {
-        if (e.key === '+') {
+        if (e.key === '+' || e.key === '=') {
             currentZoom += 0.1
             webview.setZoomFactor(currentZoom)
             zoomLevel.textContent = `${Math.round(currentZoom * 100)}%`
@@ -123,5 +148,17 @@ document.addEventListener('keydown', (e) => {
     }
 })
 
+// Error handling
+webview.addEventListener('did-fail-load', (e) => {
+    statusText.textContent = `Error: ${e.errorDescription}`
+    console.error('Load failed:', e)
+})
+
 // Initial setup
 updateNavigationButtons()
+webview.addEventListener('dom-ready', () => {
+    // Enable some webview features
+    webview.executeJavaScript(`
+        console.log('Webview ready');
+    `)
+})
